@@ -1,0 +1,69 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { getSupabaseServerClient } from '@/lib/supabase'
+import { isAdminAuthenticated } from '@/lib/auth'
+
+export async function POST(req: NextRequest) {
+  try {
+    // Auth guard — only authenticated admins may update prices
+    const authed = await isAdminAuthenticated()
+    if (!authed) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const body = await req.json()
+    const cropName: string = body?.crop_name
+    const newPrice: number = Number(body?.new_price_per_qtl)
+
+    if (!cropName || !Number.isFinite(newPrice) || newPrice <= 0) {
+      return NextResponse.json(
+        { error: 'crop_name and a positive new_price_per_qtl are required' },
+        { status: 400 },
+      )
+    }
+
+    const supabase = getSupabaseServerClient()
+
+    // Fetch the current price first so we can calculate trend_7d
+    const { data: current, error: fetchError } = await supabase
+      .from('crops_master')
+      .select('modal_price_per_qtl')
+      .eq('crop_name', cropName)
+      .single()
+
+    if (fetchError || !current) {
+      return NextResponse.json({ error: `Crop "${cropName}" not found` }, { status: 404 })
+    }
+
+    const oldPrice: number = current.modal_price_per_qtl
+    const roundedNew = Math.round(newPrice)
+    // trend_7d represents the percentage change from the previous price
+    const newTrend7d =
+      oldPrice > 0
+        ? parseFloat((((roundedNew - oldPrice) / oldPrice) * 100).toFixed(1))
+        : 0
+
+    const { data, error } = await supabase
+      .from('crops_master')
+      .update({ modal_price_per_qtl: roundedNew, trend_7d: newTrend7d })
+      .eq('crop_name', cropName)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Supabase update failed:', error)
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    if (!data) {
+      return NextResponse.json({ error: `Crop "${cropName}" not found` }, { status: 404 })
+    }
+
+    // `data` now reflects the new price and trend — any subsequent call to
+    // /api/recommend re-reads crops_master fresh from Supabase, so farmer-side
+    // profit calculations pick up this update on their very next analysis run.
+    return NextResponse.json({ crop: data })
+  } catch (err) {
+    console.error('POST /api/admin/update-price failed:', err)
+    return NextResponse.json({ error: 'Failed to update price' }, { status: 500 })
+  }
+}
