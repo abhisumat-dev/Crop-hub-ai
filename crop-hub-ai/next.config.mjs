@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins: [
-    '172.18.176.74',
-    'localhost',
-    '127.0.0.1',
-  ],
+  // Clean config: removed IP restrictions so it doesn't block network devices
 }
 
 export default nextConfig

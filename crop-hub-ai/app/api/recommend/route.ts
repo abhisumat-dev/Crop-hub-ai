@@ -64,18 +64,33 @@ export async function POST(req: NextRequest) {
     const scored = scoreCrops(farmer, weather, crops)
     const top3 = scored.slice(0, 3)
 
-    // Resolve the farmer's habit crop; fall back to whichever known crop has
-    // the highest water demand (a reasonable illustrative default) if their
-    // free-text entry doesn't match the catalogue.
+    // Resolve the farmer's habit crop against the catalogue (case-insensitive,
+    // matches crop_name or crop_id).
     const habitRow = resolveHabitCrop(farmer.habit_crop, crops)
-    const fallbackHabitId = crops.reduce((a, b) =>
-      a.water_requirement_mm >= b.water_requirement_mm ? a : b,
-    ).crop_id
-    const habitId = habitRow?.crop_id ?? fallbackHabitId
-    const habitScored = scored.find((c) => c.crop_id === habitId) ?? scored[0]
+
+    let habitScored
+    if (habitRow) {
+      // Exact match — use the crop the farmer named.
+      habitScored = scored.find((c) => c.crop_id === habitRow.crop_id) ?? scored[scored.length - 1]
+    } else if (!farmer.habit_crop.trim()) {
+      // Farmer left the field blank — compare against the 2nd-ranked crop
+      // (or fall back to #1 if there's only one crop).
+      habitScored = scored[1] ?? scored[0]
+    } else {
+      // Farmer typed something we don't recognise — use the lowest-ranked
+      // crop so the comparator still shows a meaningful contrast.
+      habitScored = scored[scored.length - 1] ?? scored[0]
+    }
 
     const aiChoice = top3[0]
-    const verdict = buildVerdict(weather, aiChoice, habitScored, farmer.location)
+    const unrecognized = !!(farmer.habit_crop.trim() && !habitRow)
+    const verdict = buildVerdict(
+      weather,
+      aiChoice,
+      habitScored,
+      farmer.location,
+      unrecognized ? farmer.habit_crop : null,
+    )
 
     return NextResponse.json({
       weather,
@@ -84,6 +99,8 @@ export async function POST(req: NextRequest) {
         ai: aiChoice,
         habit: habitScored,
         habit_resolved: Boolean(habitRow),
+        habit_input: farmer.habit_crop.trim() || null,
+        unrecognized_habit: unrecognized,
       },
       verdict,
     })

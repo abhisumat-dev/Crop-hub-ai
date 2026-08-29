@@ -126,7 +126,17 @@ export function buildVerdict(
   ai: ScoredCrop,
   habit: ScoredCrop,
   farmerLocation: string,
+  unrecognizedHabitName: string | null = null,
 ): string {
+  const parts: string[] = []
+
+  // If the farmer typed a crop we don't carry, explain that upfront
+  if (unrecognizedHabitName) {
+    parts.push(
+      `"${unrecognizedHabitName}" isn't in our current crop catalogue, so we're comparing ${ai.crop_name} against ${habit.crop_name} (our lowest-scored option for your conditions) to show the contrast.`,
+    )
+  }
+
   if (ai.crop_id === habit.crop_id) {
     return `${ai.crop_name} is already both your usual crop and the top AI match for ${farmerLocation} this season, scoring ${ai.match_score}% on soil, nutrient, weather and market fit combined.`
   }
@@ -137,8 +147,6 @@ export function buildVerdict(
       ? Math.round((profitDelta / habit.net_profit_per_acre) * 100)
       : null
   const waterDelta = habit.water_requirement_mm - ai.water_requirement_mm
-
-  const parts: string[] = []
 
   if (waterDelta > 0) {
     parts.push(
