@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Clean config: removed IP restrictions so it doesn't block network devices
+  agentRules: false, // Prevents auto-generation of CLAUDE.md and AGENTS.md
 }
 
 export default nextConfig
