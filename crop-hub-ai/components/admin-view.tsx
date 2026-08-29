@@ -385,7 +385,7 @@ export function AdminView({
                           </TableCell>
                           <TableCell>
                             <Badge
-                              variant={up ? 'secondary' : 'destructive'}
+                              variant={up ? 'default' : 'destructive'}
                               className="gap-1 font-mono"
                             >
                               {up ? (

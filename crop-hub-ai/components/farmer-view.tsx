@@ -367,7 +367,7 @@ function WeatherPill({
   label: string
 }) {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-accent-foreground">
+    <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary">
       <Icon className="size-3" />
       {label}
     </span>
