@@ -9,10 +9,21 @@ const CACHE_HEADERS = {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const location: string = (body?.location ?? '').trim()
+
+    // Ensure location is actually a string (not a number, boolean, null, etc.)
+    if (typeof body?.location !== 'string') {
+      return NextResponse.json({ error: 'location must be a string' }, { status: 400 })
+    }
+
+    const location = body.location.trim()
 
     if (!location) {
       return NextResponse.json({ error: 'location is required' }, { status: 400 })
+    }
+
+    // Block obvious injection/XSS attempts
+    if (/<[^>]+>|SELECT |DROP |INSERT |UPDATE |DELETE |UNION /i.test(location)) {
+      return NextResponse.json({ error: 'Invalid location value' }, { status: 400 })
     }
 
     const weather = await resolveWeather(location)

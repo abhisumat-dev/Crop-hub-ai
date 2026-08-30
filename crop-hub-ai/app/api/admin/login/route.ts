@@ -4,10 +4,12 @@ import { validatePin, buildSessionCookie } from '@/lib/auth'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const pin: string = (body?.pin ?? '').trim()
+    // Convert to string safely — handles numbers like 1234 sent as JSON number
+    const pin: string = String(body?.pin ?? '').trim()
 
     if (!pin) {
-      return NextResponse.json({ error: 'pin is required' }, { status: 400 })
+      // Return 401 consistently for all auth failures
+      return NextResponse.json({ error: 'Invalid PIN' }, { status: 401 })
     }
 
     if (!validatePin(pin)) {
