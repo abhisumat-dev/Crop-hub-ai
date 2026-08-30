@@ -1,0 +1,90 @@
+/* ──────────────────────────────────────────────────────────────────
+   CropHub AI — Print Stylesheet
+   Applied when the farmer clicks "Download Report" (window.print())
+   Optimised for A4 paper in portrait orientation.
+   ────────────────────────────────────────────────────────────────── */
+@media print {
+  /* Hide everything except the results area */
+  header,
+  nav,
+  aside,
+  .no-print,
+  button,
+  [data-no-print] {
+    display: none !important;
+  }
+
+  /* Reset page */
+  @page {
+    size: A4 portrait;
+    margin: 18mm 15mm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-family: 'Geist', 'Inter', Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  /* Print header */
+  .print-header {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid #154212;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .print-header h1 {
+    font-size: 18pt;
+    font-weight: 700;
+    color: #154212;
+    margin: 0;
+  }
+
+  .print-header p {
+    font-size: 9pt;
+    color: #5b6b5b;
+    margin: 0;
+  }
+
+  /* Cards */
+  .print-area {
+    display: block !important;
+  }
+
+  /* Force cards to be visible and remove shadows */
+  [class*='card'],
+  [class*='Card'],
+  .rounded-xl,
+  .rounded-2xl {
+    box-shadow: none !important;
+    border: 1px solid #e2e6e2 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Crop recommendation cards — 3 across on A4 */
+  .sm\\:grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  /* Chart — allow to stretch */
+  .recharts-wrapper,
+  .recharts-surface {
+    width: 100% !important;
+  }
+
+  /* Links */
+  a[href]:after {
+    content: '';
+  }
+
+  /* Page break before comparator */
+  .print-page-break {
+    page-break-before: always;
+  }
+}

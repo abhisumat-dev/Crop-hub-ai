@@ -1,5 +1,25 @@
-node_modules
-.next
-.env.local
+# ── Dependencies ──────────────────────────────────────────────────
+node_modules/
+
+# ── Build outputs ─────────────────────────────────────────────────
+.next/
+out/
+dist/
+*.tsbuildinfo
+
+# ── Environment / secrets ─────────────────────────────────────────
+# All .env* files are blocked EXCEPT the safe template
+.env
+.env.*
+!.env.example
+!crop-hub-ai/.env.example
+
+# ── OS & editor artifacts ─────────────────────────────────────────
 .DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# ── Stale duplicate directory ─────────────────────────────────────
 crop-hub-ai/Crop-hub-ai/

@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Typecheck & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: crop-hub-ai/package-lock.json
+
+      - name: Install dependencies
+        working-directory: crop-hub-ai
+        run: npm ci
+
+      - name: TypeScript type check
+        working-directory: crop-hub-ai
+        run: npx tsc --noEmit
+
+      - name: Production build
+        working-directory: crop-hub-ai
+        env:
+          # Use dummy values so the build doesn't fail without real secrets
+          SUPABASE_URL: https://placeholder.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: placeholder-service-role-key
+          OPENWEATHER_API_KEY: placeholder-api-key
+          ADMIN_PIN: "1234"
+        run: npm run build

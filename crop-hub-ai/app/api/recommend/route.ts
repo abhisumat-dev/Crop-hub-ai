@@ -8,6 +8,8 @@ import {
   type FarmerInput,
   type NutrientLevel,
 } from '@/lib/scoring'
+import { rateLimit, getClientIp } from '@/lib/rate-limit'
+
 
 const NUTRIENT_LEVELS: NutrientLevel[] = ['Low', 'Medium', 'High']
 
@@ -45,6 +47,16 @@ function validate(body: unknown): { farmer: FarmerInput } | { error: string } {
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit: 10 analyses per minute per IP
+    const ip = getClientIp(req)
+    const rl = rateLimit(ip, 10, 60_000)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait a moment before running another analysis.' },
+        { status: 429, headers: { 'Retry-After': String(rl.retryAfter) } },
+      )
+    }
+
     const body = await req.json()
     const validated = validate(body)
     if ('error' in validated) {

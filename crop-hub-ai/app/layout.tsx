@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
+import './print.css'
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -18,8 +19,30 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'CropHub AI — Smart Agronomy & Market Intelligence',
   description:
-    'Data-driven agronomy, climate intelligence, and market price discovery for farmers, FPOs, and APMC market administrators.',
+    'AI-powered crop recommendations grounded in soil parameters, live OpenWeatherMap climate data, and APMC mandi prices — for Maharashtra farmers and market administrators. Smart India Hackathon 2026.',
   generator: 'Next.js',
+  keywords: ['crop recommendation', 'agritech', 'Maharashtra', 'APMC', 'farmers', 'SIH 2026', 'soil analysis'],
+  authors: [{ name: 'CropHub AI Team' }],
+  openGraph: {
+    title: 'CropHub AI — Smart Agronomy & Market Intelligence',
+    description:
+      'AI-powered crop recommendations grounded in soil parameters, live climate data, and APMC mandi prices for Maharashtra farmers.',
+    url: 'https://crophub-ai.vercel.app',
+    siteName: 'CropHub AI',
+    locale: 'en_IN',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CropHub AI — Smart Agronomy & Market Intelligence',
+    description: 'AI-powered crop recommendations for Maharashtra farmers. Built for Smart India Hackathon 2026.',
+  },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'CropHub AI',
+  },
 }
 
 export const viewport: Viewport = {

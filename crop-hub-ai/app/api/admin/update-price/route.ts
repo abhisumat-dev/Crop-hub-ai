@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseServerClient } from '@/lib/supabase'
 import { isAdminAuthenticated } from '@/lib/auth'
+import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit: 5 price updates per minute per IP
+    const ip = getClientIp(req)
+    const rl = rateLimit(ip, 5, 60_000)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait before trying again.' },
+        { status: 429, headers: { 'Retry-After': String(rl.retryAfter) } },
+      )
+    }
+
     // Auth guard — only authenticated admins may update prices
     const authed = await isAdminAuthenticated()
     if (!authed) {

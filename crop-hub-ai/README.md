@@ -2,7 +2,14 @@
 
 **Data-Driven Agronomy, Climate Intelligence & Market Price Discovery**
 
-CropHub AI is a full-stack Next.js application for Smart India Hackathon 2026. It gives Maharashtra farmers AI-powered crop recommendations grounded in real soil parameters, live OpenWeatherMap climate data, and APMC mandi prices — while letting market administrators update commodity rates in real time.
+[![CI](https://github.com/abhisumat-dev/SIH/actions/workflows/ci.yml/badge.svg)](https://github.com/abhisumat-dev/SIH/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/abhisumat-dev/SIH/blob/main/LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase)](https://supabase.com)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/abhisumat-dev/SIH&root-directory=crop-hub-ai&env=SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY,OPENWEATHER_API_KEY,ADMIN_PIN&envDescription=See%20crop-hub-ai/.env.example%20for%20details)
+
+CropHub AI is a full-stack Next.js application for **Smart India Hackathon 2026**. It gives Maharashtra farmers AI-powered crop recommendations grounded in real soil parameters, live OpenWeatherMap climate data, and APMC mandi prices — while letting market administrators update commodity rates in real time.
 
 ---
 

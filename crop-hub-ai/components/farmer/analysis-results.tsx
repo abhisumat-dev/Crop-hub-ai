@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { Droplets, CalendarDays, Wallet, TrendingUp, Sprout, TrendingDown } from 'lucide-react'
+import { Droplets, CalendarDays, Wallet, TrendingUp, Sprout, TrendingDown, Printer } from 'lucide-react'
 import {
   Card,
   CardContent,
@@ -26,6 +26,8 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 import { formatINR, type RecommendResponse, type ScoredCrop } from '@/lib/types'
+import { Button } from '@/components/ui/button'
+
 
 const chartConfig = {
   cost: { label: 'Input Cost', color: 'var(--chart-4)' },
@@ -73,13 +75,34 @@ export function AnalysisResults({
   )
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Recommended crops */}
-      <section className="flex flex-col gap-3">
+    <div className="flex flex-col gap-6 print-area">
+      {/* Print-only header — hidden in browser, shown when printing */}
+      <div className="print-header hidden">
+        <div>
+          <h1>CropHub AI — Crop Analysis Report</h1>
+          <p>Generated on {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })} · Smart India Hackathon 2026</p>
+        </div>
+      </div>
+
+      {/* Download Report button — hidden when printing */}
+      <div className="flex items-center justify-between no-print">
         <div className="flex items-center gap-2">
           <Sprout className="size-4 text-primary" />
           <h2 className="text-lg font-semibold">{t('recommended')}</h2>
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2"
+          onClick={() => window.print()}
+        >
+          <Printer className="size-4" />
+          Download Report
+        </Button>
+      </div>
+
+      {/* Recommended crop cards */}
+      <section className="flex flex-col gap-3">
         <div className="grid gap-3 sm:grid-cols-3">
           {recommendations.map((crop, i) => (
             <CropCard key={crop.crop_id} crop={crop} rank={i + 1} t={t} />
