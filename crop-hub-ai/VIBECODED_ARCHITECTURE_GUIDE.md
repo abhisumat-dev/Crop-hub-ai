@@ -17,7 +17,7 @@
 
 ## 1. What is CropHub AI?
 
-**CropHub AI** is an intelligent, full-stack Agritech Decision Intelligence and Market Discovery platform built for **Smart India Hackathon (SIH) 2026**. It bridges the gap between field-level soil science, real-time meteorological forecasts, and volatile APMC (Agricultural Produce Market Committee) mandi commodity rates across Maharashtra.
+**CropHub AI** is an intelligent, full-stack Agritech Decision Intelligence and Market Discovery platform built for **Smart India Hackathon (SIH) 2026**. It bridges the gap between field-level soil science, real-time meteorological forecasts, and volatile APMC (Agricultural Produce Market Committee) mandi commodity rates across Indian agricultural regions.
 
 ### 🌟 Core Capabilities & Features
 * **🎯 100-Point Multi-Dimensional Crop Recommendation Engine**:
@@ -44,7 +44,7 @@
 ## 2. Real-World Problems Identified & How They Are Solved
 
 ### Problem 1: Intuition-Based Crop Selection (The Monoculture Trap)
-* **The Reality**: In Maharashtra (e.g., Marathwada and Vidarbha), millions of farmers repeatedly sow Soybean or Cotton year after year regardless of soil nutrient depletion or weather outlook, frequently leading to crop failure or debt.
+* **The Reality**: Across many agrarian belts (e.g., Marathwada, Vidarbha, Malwa, and northern plains), millions of farmers repeatedly sow Soybean, Cotton, or Wheat year after year regardless of soil nutrient depletion or weather outlook, frequently leading to crop failure or debt.
 * **The Solution**: CropHub AI takes real soil test inputs (Soil Type, pH, and Nitrogen, Phosphorus, Potassium levels) and calculates exact biological compatibility scores against ICAR crop baselines.
 
 ### Problem 2: Weather Guesswork & Water Budget Deficits
@@ -297,7 +297,7 @@ npm run build
 
 ## 🏁 Summary: Why This Platform Stands Out
 CropHub AI isn't just a prototype — it is an engineered, production-ready system featuring:
-1. **Real-world agronomic grounding** (ICAR standards + Maharashtra climate data).
+1. **Real-world agronomic grounding** (ICAR standards + nationwide multi-zone climate data).
 2. **Robust security architecture** (HMAC sessions, rate limiting, XSS/SQL defenses, security headers).
 3. **World-class UX & Accessibility** (Trilingual, Dark Mode, Recharts, Mobile PWA, Instant PDF Reports).
 4. **Clean, documented code** ready for review, deployment, and real-world impact.

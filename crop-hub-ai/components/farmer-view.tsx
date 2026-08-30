@@ -229,6 +229,7 @@ export function FarmerView({
                 </FieldLabel>
                 <Input
                   id="location"
+                  placeholder="e.g. Pune, Indore, Patna, Jaipur, Ludhiana..."
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                 />

@@ -1,7 +1,7 @@
 {
   "name": "CropHub AI",
   "short_name": "CropHub",
-  "description": "AI-powered crop recommendations for Maharashtra farmers — soil, weather & market intelligence",
+  "description": "AI-powered crop recommendations for farmers — soil, weather & market intelligence",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8f9fa",

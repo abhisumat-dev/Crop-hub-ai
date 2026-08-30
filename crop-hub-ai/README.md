@@ -9,7 +9,7 @@
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/abhisumat-dev/SIH&root-directory=crop-hub-ai&env=SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY,OPENWEATHER_API_KEY,ADMIN_PIN&envDescription=See%20crop-hub-ai/.env.example%20for%20details)
 
-CropHub AI is a full-stack Next.js application for **Smart India Hackathon 2026**. It gives Maharashtra farmers AI-powered crop recommendations grounded in real soil parameters, live OpenWeatherMap climate data, and APMC mandi prices — while letting market administrators update commodity rates in real time.
+CropHub AI is a full-stack Next.js application for **Smart India Hackathon 2026**. It gives farmers AI-powered crop recommendations grounded in real soil parameters, live OpenWeatherMap climate data, and APMC mandi prices — while letting market administrators update commodity rates in real time.
 
 ---
 
@@ -58,12 +58,6 @@ npm install
 ### 3. Create a Supabase project
 
 1. Go to [supabase.com](https://supabase.com) → **New Project**
-2. Choose a region close to India (e.g. `ap-south-1`)
-3. Once created, go to **Project Settings → API**
-4. Copy your **Project URL** and **service_role** secret key
-
-### 4. Run the database schema
-
 1. In your Supabase dashboard, open **SQL Editor → New Query**
 2. Paste the full contents of [`schema.sql`](./schema.sql)
 3. Click **Run** — this creates the `crops_master` table and seeds 10 crops
@@ -157,7 +151,7 @@ Each crop is scored out of 100 on four dimensions:
 
 ---
 
-## Crops Seeded (Maharashtra Context)
+## Crops Seeded (Indian Agricultural Baseline)
 
 | Crop | Category | Avg Yield | Price/Qtl |
 |---|---|---|---|

@@ -1,6 +1,6 @@
 # Contributing to CropHub AI
 
-Thank you for your interest in contributing! This project was built for **Smart India Hackathon 2026** to help Maharashtra farmers make data-driven crop decisions.
+Thank you for your interest in contributing! This project was built for **Smart India Hackathon 2026** to help farmers make data-driven crop decisions.
 
 ---
 

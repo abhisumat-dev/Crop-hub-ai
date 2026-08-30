@@ -320,7 +320,7 @@ export function AdminView({
           <CardHeader>
             <CardTitle>Commodity Price Management</CardTitle>
             <CardDescription>
-              Maharashtra APMC modal rates. Edits instantly resync farmer
+              APMC mandi modal rates. Edits instantly resync farmer
               recommendations and recalculate 7-day trend.
             </CardDescription>
           </CardHeader>

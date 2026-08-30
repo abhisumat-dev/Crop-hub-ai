@@ -19,14 +19,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'CropHub AI — Smart Agronomy & Market Intelligence',
   description:
-    'AI-powered crop recommendations grounded in soil parameters, live OpenWeatherMap climate data, and APMC mandi prices — for Maharashtra farmers and market administrators. Smart India Hackathon 2026.',
+    'AI-powered crop recommendations grounded in soil parameters, live OpenWeatherMap climate data, and APMC mandi prices — empowering farmers and market administrators. Smart India Hackathon 2026.',
   generator: 'Next.js',
-  keywords: ['crop recommendation', 'agritech', 'Maharashtra', 'APMC', 'farmers', 'SIH 2026', 'soil analysis'],
+  keywords: ['crop recommendation', 'agritech', 'India', 'APMC', 'farmers', 'SIH 2026', 'soil analysis', 'agriculture'],
   authors: [{ name: 'CropHub AI Team' }],
   openGraph: {
     title: 'CropHub AI — Smart Agronomy & Market Intelligence',
     description:
-      'AI-powered crop recommendations grounded in soil parameters, live climate data, and APMC mandi prices for Maharashtra farmers.',
+      'AI-powered crop recommendations grounded in soil parameters, live climate data, and APMC mandi prices for farmers.',
     url: 'https://crophub-ai.vercel.app',
     siteName: 'CropHub AI',
     locale: 'en_IN',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'CropHub AI — Smart Agronomy & Market Intelligence',
-    description: 'AI-powered crop recommendations for Maharashtra farmers. Built for Smart India Hackathon 2026.',
+    description: 'AI-powered crop recommendations for farmers. Built for Smart India Hackathon 2026.',
   },
   manifest: '/manifest.json',
   appleWebApp: {

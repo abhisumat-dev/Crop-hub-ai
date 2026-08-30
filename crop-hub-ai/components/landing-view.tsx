@@ -64,7 +64,7 @@ const features = [
 // ─── Stats ───────────────────────────────────────────────────────────────────
 const stats = [
   { value: 10, label: 'Crops in Database', suffix: '+' },
-  { value: 8, label: 'Maharashtra Districts', suffix: '' },
+  { value: 28, label: 'States & Regions Covered', suffix: '+' },
   { value: 4, label: 'Scoring Dimensions', suffix: '' },
   { value: 3, label: 'Languages Supported', suffix: '' },
 ]
@@ -79,7 +79,7 @@ const dataSources = [
   {
     icon: BarChart3,
     title: 'APMC Mandi Prices',
-    desc: 'Maharashtra Agricultural Produce Market Committee live commodity rates.',
+    desc: 'Agricultural Produce Market Committee (APMC) live commodity modal rates & trends.',
   },
   {
     icon: Globe,
@@ -163,7 +163,7 @@ export function LandingView({
           {/* Badge */}
           <span className="inline-flex animate-fade-in items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-4 py-1.5 text-sm font-medium text-primary">
             <Sparkles className="size-3.5" />
-            AI-Powered Agronomy Platform · Maharashtra
+            AI-Powered Agronomy & Market Intelligence Platform
           </span>
 
           {/* Headline */}
@@ -177,8 +177,8 @@ export function LandingView({
           {/* Sub-headline */}
           <p className="animate-fade-in max-w-2xl text-balance text-lg text-muted-foreground [animation-delay:200ms]">
             Data-driven crop recommendations grounded in real soil parameters,
-            live OpenWeatherMap climate data, and APMC mandi prices — for
-            Maharashtra farmers and market administrators.
+            live OpenWeatherMap climate data, and APMC mandi prices — empowering
+            farmers, FPOs, and market administrators across India.
           </p>
 
           {/* CTA row */}
@@ -310,7 +310,7 @@ export function LandingView({
             <Leaf className="size-3.5 text-primary" />
             <span className="font-semibold text-foreground">CropHub AI</span>
           </div>
-          <p>Built with ❤️ for Maharashtra Farmers · Smart India Hackathon 2026</p>
+          <p>Built with ❤️ for Farmers · Smart India Hackathon 2026</p>
           <p>© 2026 CropHub AI. MIT License.</p>
           <a
             href="https://github.com/abhisumat-dev/SIH"

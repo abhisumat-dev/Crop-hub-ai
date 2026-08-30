@@ -1,7 +1,7 @@
 {
   "name": "crop-hub-ai",
   "version": "1.0.0",
-  "description": "AI-powered crop recommendation, climate intelligence & APMC market price discovery for Maharashtra farmers — Smart India Hackathon 2026",
+  "description": "AI-powered crop recommendation, climate intelligence & APMC market price discovery for farmers — Smart India Hackathon 2026",
   "keywords": ["agritech", "nextjs", "supabase", "crop-recommendation", "india", "farmers", "apmc", "sih-2026"],
   "private": true,
   "engines": {
