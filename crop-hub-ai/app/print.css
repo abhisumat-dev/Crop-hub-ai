@@ -68,7 +68,8 @@
   }
 
   /* Crop recommendation cards — 3 across on A4 */
-  .sm\\:grid-cols-3 {
+  .sm\:grid-cols-3,
+  [class*='sm:grid-cols-3'] {
     grid-template-columns: repeat(3, 1fr) !important;
   }
 

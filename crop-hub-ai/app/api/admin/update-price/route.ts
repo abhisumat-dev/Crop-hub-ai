@@ -22,12 +22,13 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const cropName: string = body?.crop_name
+    const cropId: string = typeof body?.crop_id === 'string' ? body.crop_id.trim() : ''
+    const cropName: string = typeof body?.crop_name === 'string' ? body.crop_name.trim() : ''
     const newPrice: number = Number(body?.new_price_per_qtl)
 
-    if (!cropName || !Number.isFinite(newPrice) || newPrice <= 0) {
+    if ((!cropId && !cropName) || !Number.isFinite(newPrice) || newPrice <= 0 || newPrice > 500_000) {
       return NextResponse.json(
-        { error: 'crop_name and a positive new_price_per_qtl are required' },
+        { error: 'Valid crop identifier and price between ₹1 and ₹5,00,000 per quintal are required' },
         { status: 400 },
       )
     }
@@ -35,14 +36,17 @@ export async function POST(req: NextRequest) {
     const supabase = getSupabaseServerClient()
 
     // Fetch the current price first so we can calculate trend_7d
-    const { data: current, error: fetchError } = await supabase
-      .from('crops_master')
-      .select('modal_price_per_qtl')
-      .eq('crop_name', cropName)
-      .single()
+    let query = supabase.from('crops_master').select('crop_id, crop_name, modal_price_per_qtl')
+    if (cropId) {
+      query = query.eq('crop_id', cropId)
+    } else {
+      query = query.eq('crop_name', cropName)
+    }
+
+    const { data: current, error: fetchError } = await query.single()
 
     if (fetchError || !current) {
-      return NextResponse.json({ error: `Crop "${cropName}" not found` }, { status: 404 })
+      return NextResponse.json({ error: `Crop "${cropId || cropName}" not found in master records` }, { status: 404 })
     }
 
     const oldPrice: number = current.modal_price_per_qtl
@@ -56,17 +60,17 @@ export async function POST(req: NextRequest) {
     const { data, error } = await supabase
       .from('crops_master')
       .update({ modal_price_per_qtl: roundedNew, trend_7d: newTrend7d })
-      .eq('crop_name', cropName)
+      .eq('crop_id', current.crop_id)
       .select()
       .single()
 
     if (error) {
       console.error('Supabase update failed:', error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ error: 'Database update failed. Please try again later.' }, { status: 500 })
     }
 
     if (!data) {
-      return NextResponse.json({ error: `Crop "${cropName}" not found` }, { status: 404 })
+      return NextResponse.json({ error: `Crop not found` }, { status: 404 })
     }
 
     // `data` now reflects the new price and trend — any subsequent call to
@@ -78,3 +82,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to update price' }, { status: 500 })
   }
 }
+

@@ -162,8 +162,8 @@ export function AdminView({
   async function save() {
     if (!editing) return
     const next = Number(draft)
-    if (!Number.isFinite(next) || next <= 0) {
-      toast.error('Enter a valid price greater than zero.')
+    if (!Number.isFinite(next) || next <= 0 || next > 500_000) {
+      toast.error('Enter a valid price between ₹1 and ₹5,00,000 per quintal.')
       return
     }
 
@@ -173,6 +173,7 @@ export function AdminView({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          crop_id: editing.crop_id,
           crop_name: editing.crop_name,
           new_price_per_qtl: Math.round(next),
         }),

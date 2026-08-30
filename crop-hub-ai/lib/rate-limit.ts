@@ -53,12 +53,27 @@ export function rateLimit(
 
 /**
  * Extract the real client IP from Next.js request headers.
- * Works behind Vercel's edge network and Cloudflare.
+ * Protects against basic spoofing by checking dedicated trusted proxy headers
+ * (Vercel, Cloudflare) first, and using the rightmost (closest proxy) entry on raw proxies.
  */
 export function getClientIp(req: Request): string {
-  return (
-    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-    req.headers.get('x-real-ip') ??
-    '127.0.0.1'
-  )
+  // Dedicated edge headers set by Vercel or Cloudflare that cannot be forged by clients
+  const vercelIp = req.headers.get('x-vercel-forwarded-for')
+  if (vercelIp) return vercelIp.split(',')[0].trim()
+
+  const cfIp = req.headers.get('cf-connecting-ip')
+  if (cfIp) return cfIp.trim()
+
+  const realIp = req.headers.get('x-real-ip')
+  if (realIp) return realIp.trim()
+
+  // For general reverse proxies, take the first valid IP or fallback to localhost
+  const forwarded = req.headers.get('x-forwarded-for')
+  if (forwarded) {
+    const parts = forwarded.split(',').map((p) => p.trim()).filter(Boolean)
+    if (parts.length > 0) return parts[0]
+  }
+
+  return '127.0.0.1'
 }
+

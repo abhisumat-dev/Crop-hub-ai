@@ -132,19 +132,20 @@ async function fetchLiveWeather(location: string, apiKey: string): Promise<Weath
     }
   }
 
-  // Step 4: If forecasted rain is essentially zero (dry season query),
-  // fall back to the historical average for that district so the scoring
-  // engine still returns meaningful results year-round.
+  // Step 4: If forecasted rain is present, blend 5-day scaled forecast with
+  // historical district baselines and cap at 1500mm max to prevent extreme skew.
+  const cityKey = location.split(',')[0]?.trim().toLowerCase() ?? 'default'
+  const historicalBaseline =
+    HISTORICAL_SEASONAL_RAINFALL[cityKey] ?? HISTORICAL_SEASONAL_RAINFALL.default
+
   let seasonalRainfallMm: number
   if (forecastRainMm > 5) {
-    // Scale 5-day forecast to a ~90-day Kharif season
-    // (90 days / 5 days = 18× factor, then add a baseline of 100mm
-    //  for pre/post monsoon contribution)
-    seasonalRainfallMm = Math.round(forecastRainMm * 18 + 100)
+    // 5-day forecast scaled to season, blended with historical average for reliability
+    const scaledEstimate = forecastRainMm * 14 + 150
+    const blended = Math.round(0.6 * scaledEstimate + 0.4 * historicalBaseline)
+    seasonalRainfallMm = Math.max(250, Math.min(1500, blended))
   } else {
-    const cityKey = location.split(',')[0]?.trim().toLowerCase() ?? 'default'
-    seasonalRainfallMm =
-      HISTORICAL_SEASONAL_RAINFALL[cityKey] ?? HISTORICAL_SEASONAL_RAINFALL.default
+    seasonalRainfallMm = historicalBaseline
   }
 
   return {

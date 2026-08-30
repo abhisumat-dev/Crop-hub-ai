@@ -50,15 +50,23 @@ function scoreNpk(farmer: FarmerInput, crop: CropRow): number {
 
 function scoreWeather(weather: WeatherResult, crop: CropRow): number {
   const ratio = weather.rainfall_mm / crop.water_requirement_mm
-  if (ratio >= 1) return 100
-  return Math.round(Math.max(0, ratio * 100))
+  if (ratio < 1) return Math.round(Math.max(0, ratio * 100))
+  if (ratio <= 1.8) return 100 // Optimal water range
+  // Penalize excessive flooding/waterlogging beyond 1.8x requirement
+  return Math.round(Math.max(40, 100 - (ratio - 1.8) * 35))
 }
 
-function scoreMarket(crop: CropRow, maxRoi: number): number {
+function scoreMarket(crop: CropRow, maxRoi: number, minRoi: number): number {
   const profit = netProfitPerAcre(crop)
   const roi = crop.base_cost_per_acre > 0 ? profit / crop.base_cost_per_acre : 0
-  if (maxRoi <= 0) return 0
-  return Math.round(Math.max(0, Math.min(1, roi / maxRoi)) * 100)
+  if (roi >= 0) {
+    if (maxRoi <= 0) return 50
+    return Math.round(Math.min(1, roi / maxRoi) * 100)
+  }
+  // Negative ROI: provide a graduated score between 0 and 20 to differentiate mild vs severe loss
+  const lossSpan = Math.abs(minRoi) || 1
+  const lossRatio = Math.min(1, Math.abs(roi) / lossSpan)
+  return Math.round(Math.max(0, 20 * (1 - lossRatio)))
 }
 
 /**
@@ -72,16 +80,17 @@ export function scoreCrops(
   weather: WeatherResult,
   crops: CropRow[],
 ): ScoredCrop[] {
-  const maxRoi = Math.max(
-    ...crops.map((c) => (c.base_cost_per_acre > 0 ? netProfitPerAcre(c) / c.base_cost_per_acre : 0)),
-    0,
+  const allRois = crops.map((c) =>
+    c.base_cost_per_acre > 0 ? netProfitPerAcre(c) / c.base_cost_per_acre : 0,
   )
+  const maxRoi = Math.max(...allRois, 0)
+  const minRoi = Math.min(...allRois, 0)
 
   const scored: ScoredCrop[] = crops.map((crop) => {
     const soil_score = scoreSoil(farmer, crop)
     const npk_score = scoreNpk(farmer, crop)
     const weather_score = scoreWeather(weather, crop)
-    const market_score = scoreMarket(crop, maxRoi)
+    const market_score = scoreMarket(crop, maxRoi, minRoi)
 
     const match_score = Math.round(
       soil_score * WEIGHTS.soil +
