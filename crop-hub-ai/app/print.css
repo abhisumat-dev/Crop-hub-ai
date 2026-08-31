@@ -4,7 +4,55 @@
    Optimised for A4 paper in portrait orientation.
    ────────────────────────────────────────────────────────────────── */
 @media print {
-  /* Hide everything except the results area */
+  /* Enforce exact color printing across all browsers */
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Reset theme variables to high-contrast print colors (light mode) */
+  :root,
+  .dark,
+  html,
+  body {
+    --background: #ffffff !important;
+    --foreground: #16211c !important;
+    --card: #ffffff !important;
+    --card-foreground: #16211c !important;
+    --popover: #ffffff !important;
+    --popover-foreground: #16211c !important;
+    --primary: #154212 !important;
+    --primary-foreground: #ffffff !important;
+    --secondary: #eef1ee !important;
+    --secondary-foreground: #154212 !important;
+    --muted: #f4f6f4 !important;
+    --muted-foreground: #4a5a4a !important;
+    --border: #d8ded8 !important;
+    --input: #d8ded8 !important;
+    --color-cost: #d4a017 !important;
+    --color-revenue: #154212 !important;
+    --chart-1: #154212 !important;
+    --chart-2: #38702c !important;
+    --chart-3: #6b9e38 !important;
+    --chart-4: #d4a017 !important;
+    --chart-5: #a04000 !important;
+    background: #ffffff !important;
+    color: #16211c !important;
+    font-family: 'Geist', 'Inter', Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.4;
+  }
+
+  /* Reset page */
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+
+  /* Hide everything not part of the advisory report */
   header,
   nav,
   aside,
@@ -14,18 +62,14 @@
     display: none !important;
   }
 
-  /* Reset page */
-  @page {
-    size: A4 portrait;
-    margin: 18mm 15mm;
-  }
-
-  body {
-    background: white !important;
-    color: black !important;
-    font-family: 'Geist', 'Inter', Arial, sans-serif;
-    font-size: 11pt;
-    line-height: 1.5;
+  /* Reset layout grid to 100% full width */
+  .lg\:grid-cols-\[380px_1fr\],
+  [class*='lg:grid-cols'] {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   /* Print header */
@@ -34,35 +78,40 @@
     align-items: center;
     gap: 10px;
     border-bottom: 2px solid #154212;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
   }
 
   .print-header h1 {
-    font-size: 18pt;
+    font-size: 16pt;
     font-weight: 700;
     color: #154212;
     margin: 0;
   }
 
   .print-header p {
-    font-size: 9pt;
-    color: #5b6b5b;
+    font-size: 8.5pt;
+    color: #4a5a4a;
     margin: 0;
   }
 
-  /* Cards */
+  /* Print area */
   .print-area {
-    display: block !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    width: 100% !important;
   }
 
-  /* Force cards to be visible and remove shadows */
+  /* Force cards to be clean, visible, and prevent awkward page breaks */
   [class*='card'],
   [class*='Card'],
   .rounded-xl,
   .rounded-2xl {
+    background: #ffffff !important;
+    color: #16211c !important;
     box-shadow: none !important;
-    border: 1px solid #e2e6e2 !important;
+    border: 1px solid #d8ded8 !important;
     break-inside: avoid;
     page-break-inside: avoid;
   }
@@ -70,13 +119,50 @@
   /* Crop recommendation cards — 3 across on A4 */
   .sm\:grid-cols-3,
   [class*='sm:grid-cols-3'] {
+    display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
   }
 
-  /* Chart — allow to stretch */
-  .recharts-wrapper,
+  /* Chart container & SVG elements — ensure explicit dimensions */
+  [data-slot='chart'],
+  .recharts-responsive-container {
+    width: 100% !important;
+    height: 260px !important;
+    min-height: 260px !important;
+    aspect-ratio: auto !important;
+    display: block !important;
+  }
+
+  .recharts-wrapper {
+    width: 100% !important;
+    height: 260px !important;
+    position: relative !important;
+  }
+
   .recharts-surface {
     width: 100% !important;
+    height: 260px !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure bar rectangles and axes are rendered with high contrast */
+  .recharts-bar-rectangles rect,
+  .recharts-bar-rectangle path,
+  .recharts-rectangle {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .recharts-cartesian-axis-tick text {
+    fill: #4a5a4a !important;
+    font-size: 8.5pt !important;
+    visibility: visible !important;
+  }
+
+  .recharts-cartesian-grid line {
+    stroke: #e2e6e2 !important;
+    visibility: visible !important;
   }
 
   /* Links */
@@ -84,7 +170,7 @@
     content: '';
   }
 
-  /* Page break before comparator */
+  /* Page break before comparator if needed */
   .print-page-break {
     page-break-before: always;
   }

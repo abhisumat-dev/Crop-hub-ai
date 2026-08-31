@@ -136,8 +136,8 @@ export function AnalysisResults({
                 content={<ChartTooltipContent formatter={tooltipFormatter} />}
               />
               <ChartLegend content={<ChartLegendContent />} />
-              <Bar dataKey="cost" fill="var(--color-cost)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="cost" fill="var(--color-cost)" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+              <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} isAnimationActive={false} />
             </BarChart>
           </ChartContainer>
         </CardContent>

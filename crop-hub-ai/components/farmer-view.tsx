@@ -215,7 +215,7 @@ export function FarmerView({
 
       <div className="mx-auto grid w-full max-w-7xl flex-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[380px_1fr]">
         {/* Left column: input form */}
-        <Card className="h-fit lg:sticky lg:top-20">
+        <Card className="h-fit lg:sticky lg:top-20 no-print">
           <CardHeader>
             <CardTitle>{t('inputTitle')}</CardTitle>
             <CardDescription>{t('inputSubtitle')}</CardDescription>
