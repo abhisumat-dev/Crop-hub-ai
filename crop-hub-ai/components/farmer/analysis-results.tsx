@@ -117,29 +117,72 @@ export function AnalysisResults({
           <CardDescription>{t('profitSubtitle')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfig} className="h-[280px] w-full">
-            <BarChart accessibilityLayer data={chartData} margin={{ top: 24 }}>
-              <CartesianGrid vertical={false} strokeDasharray="3 3" />
-              <XAxis
-                dataKey="crop"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-              />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                width={56}
-                tickFormatter={axisKFormatter}
-              />
-              <ChartTooltip
-                content={<ChartTooltipContent formatter={tooltipFormatter} />}
-              />
-              <ChartLegend content={<ChartLegendContent />} />
-              <Bar dataKey="cost" fill="var(--color-cost)" radius={[4, 4, 0, 0]} isAnimationActive={false} />
-              <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} isAnimationActive={false} />
-            </BarChart>
-          </ChartContainer>
+          {/* Interactive Screen Chart (uses ResponsiveContainer for dynamic resizing & tooltips) */}
+          <div className="no-print">
+            <ChartContainer config={chartConfig} className="h-[280px] w-full">
+              <BarChart accessibilityLayer data={chartData} margin={{ top: 24 }}>
+                <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="crop"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  width={56}
+                  tickFormatter={axisKFormatter}
+                />
+                <ChartTooltip
+                  content={<ChartTooltipContent formatter={tooltipFormatter} />}
+                />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Bar dataKey="cost" fill="var(--color-cost)" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+              </BarChart>
+            </ChartContainer>
+          </div>
+
+          {/* Static Print Chart (Fixed dimensions & direct colors — bypasses ResponsiveContainer for 100% guaranteed PDF/print visibility) */}
+          <div className="print-only hidden">
+            <div className="flex flex-col items-center justify-center w-full py-1">
+              <BarChart
+                width={650}
+                height={240}
+                data={chartData}
+                margin={{ top: 16, right: 30, left: 10, bottom: 5 }}
+              >
+                <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e2e6e2" />
+                <XAxis
+                  dataKey="crop"
+                  tickLine={false}
+                  axisLine={{ stroke: '#d8ded8' }}
+                  tick={{ fill: '#16211c', fontSize: 11, fontWeight: 600 }}
+                  tickMargin={6}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  width={56}
+                  tickFormatter={axisKFormatter}
+                  tick={{ fill: '#4a5a4a', fontSize: 10 }}
+                />
+                <Bar dataKey="cost" fill="#d4a017" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="revenue" fill="#154212" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+              </BarChart>
+              <div className="flex items-center justify-center gap-6 pt-2 text-xs">
+                <div className="flex items-center gap-1.5 font-medium text-[#16211c]">
+                  <span className="inline-block size-3 rounded-[2px] bg-[#d4a017]" />
+                  {t('inputCost')}
+                </div>
+                <div className="flex items-center gap-1.5 font-medium text-[#16211c]">
+                  <span className="inline-block size-3 rounded-[2px] bg-[#154212]" />
+                  {t('revenue')}
+                </div>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
